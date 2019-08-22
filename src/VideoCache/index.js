@@ -1,6 +1,7 @@
 const updateVideos = require('../Youtube/GetPopularVideos')
 const VideoGroup = require('./VideoGroup')
 
+
 var db = {}
 updateVideos(db)
 
@@ -72,27 +73,12 @@ function getAllVideosForCountries(host, countries) {
   return { hostVideos, outsideVideos }
 }
 
-/**
- * @param {string} host The country code of the participant's country.
- * @param {string[]} countries Array of country codes. Requires: countries.length === 6.
- */
-module.exports = {
-  status: function () {
-    console.log(db, Object.keys(db).length)
-  },
-  getVideos: function (host, countries) {
-    const { hostVideos, outsideVideos } = getAllVideosForCountries(host, countries)
-    console.log(hostVideos, true)
-    const arrangedVideos = selectVideos(hostVideos, outsideVideos)
-    return arrangedVideos
-  }
-}
-
 let refreshed = false
 /**
  * Refresh every midnight only once a day.
  */
 setInterval(() => {
+  console.log('Checking clock.')
   const date = new Date();
   const hour = date.getHours()
   if (!refreshed && hour === 1) {
@@ -102,3 +88,21 @@ setInterval(() => {
     refreshed = false
   }
 }, 1000)
+
+function status() {
+  console.log(db, Object.keys(db).length)
+}
+
+/**
+* @param {string} host The country code of the participant's country.
+* @param {string[]} countries Array of country codes. Requires: countries.length === 6.
+*/
+function getVideos(host, countries) {
+  const { hostVideos, outsideVideos } = getAllVideosForCountries(host, countries)
+  const arrangedVideos = selectVideos(hostVideos, outsideVideos)
+  return arrangedVideos
+}
+
+module.exports = { status, getVideos }
+
+
