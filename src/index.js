@@ -26,6 +26,6 @@ app.get('/videos', (req, res) => {
   res.send({ videos })
 })
 
-app.listen(3000, () =>
+app.listen(process.env.PORT || 3000, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`),
 );
