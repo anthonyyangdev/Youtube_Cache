@@ -30,6 +30,7 @@ function updatePopularVideosAt(mapping, countryCode) {
       const items = new VideoGroup()
       for (let x of res.data.items) {
         const id = x.id
+        console.log(id)
         const player = x.player.embedHtml
         const isEmbeddable = x.status.embeddable
         const isPublic = x.status.privacyStatus === "public"
@@ -58,6 +59,7 @@ function updatePopularVideosAt(mapping, countryCode) {
  */
 function updateAllVideos(mapping) {
   for (let c in countries) {
+    console.log('Country', c)
     updatePopularVideosAt(mapping, c)
   }
 }
