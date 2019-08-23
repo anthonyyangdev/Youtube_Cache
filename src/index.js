@@ -3,7 +3,7 @@ const countries = require('./Countries/index')
 const { status, getVideos } = require('./VideoCache/index')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-
+require('newrelic');
 
 app.use(cors())
 app.use(bodyParser.json())
