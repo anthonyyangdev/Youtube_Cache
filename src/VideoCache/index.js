@@ -7,7 +7,7 @@ var contents = fs.readFileSync(__dirname + "/../Database/db.json");
 var jsonDB = JSON.parse(contents);
 
 var db = jsonDB
-updateVideos(db)
+// updateVideos(db)
 
 /**
  * Return an object mapping video id to the information of that video.
@@ -85,10 +85,10 @@ setInterval(() => {
   console.log('Checking clock.')
   const date = new Date();
   const hour = date.getHours()
-  if (!refreshed && hour === 1) {
+  if (!refreshed && hour === 4) {
     updateVideos(db)
     refreshed = true
-  } else if (hour !== 1) {
+  } else if (hour !== 4) {
     refreshed = false
   }
 }, 1000)
