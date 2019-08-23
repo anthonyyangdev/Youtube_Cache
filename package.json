@@ -4,7 +4,7 @@
   "description": "A database of the most popular videos in every country from the Youtube API. Updated daily.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -18,9 +18,11 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "google-auth-library": "^5.2.0",
     "googleapis": "^42.0.0",
-    "newrelic": "^5.11.0",
-    "nodemon": "^1.19.1"
+    "newrelic": "^5.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1",
+    "google-auth-library": "^5.2.0"
   }
 }

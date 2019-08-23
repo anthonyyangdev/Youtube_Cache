@@ -1,8 +1,12 @@
 const updateVideos = require('../Youtube/GetPopularVideos')
 const VideoGroup = require('./VideoGroup')
 
+// Read Synchrously
+var fs = require("fs")
+var contents = fs.readFileSync(__dirname + "/../Database/db.json");
+var jsonDB = JSON.parse(contents);
 
-var db = {}
+var db = jsonDB
 updateVideos(db)
 
 /**
