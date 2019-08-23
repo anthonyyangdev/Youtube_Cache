@@ -85,10 +85,10 @@ setInterval(() => {
   console.log('Checking clock.')
   const date = new Date();
   const hour = date.getHours()
-  if (!refreshed && hour === 4) {
+  if (!refreshed && hour === 8) {
     updateVideos(db)
     refreshed = true
-  } else if (hour !== 4) {
+  } else if (hour !== 8) {
     refreshed = false
   }
 }, 1000)
