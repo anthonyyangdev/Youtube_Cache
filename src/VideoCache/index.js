@@ -1,19 +1,12 @@
 const updateVideos = require('../Youtube/GetPopularVideos')
 const VideoGroup = require('./VideoGroup')
-
-// Read Synchrously
-var fs = require("fs")
-var contents = fs.readFileSync(__dirname + "/../Database/db.json");
-var jsonDB = JSON.parse(contents);
-
-var db = jsonDB
-// updateVideos(db)
+const fs = require('fs')
 
 /**
  * Return an object mapping video id to the information of that video.
  * @param {string} country 
  */
-function getVideosAt(country) {
+function getVideosAt(db, country) {
   return db[country] ||
     (function () {
       throw new Error(`Country ${country} does not exist in the database.`)
@@ -25,18 +18,17 @@ function getVideosAt(country) {
  * @param {{}[]} outside An array of objects {list, set}
  */
 function selectVideos(host, outside) {
-  if (host.size() !== 50) {
+  if (host.index !== 50) {
     throw new Error('The videos from the host country needs to contain 50 videos.')
   }
 
   let result = new VideoGroup()
-
   for (let c of outside) {
-    const filtered = c.getList().filter(v => v.status)
+    const filtered = c.list.filter(v => v.status)
     if (filtered.length === 0) throw new Error(`No videos are available at ${c}.`)
     let found = false
     for (let vids of filtered) {
-      if (host.includes(vids) || result.includes(vids)) {
+      if (host.set[vids] || result.includes(vids)) {
         continue
       } else {
         result.add(vids)
@@ -72,24 +64,24 @@ function getAllVideosForCountries(host, countries) {
     throw new Error(`The countries array must contain 6 codes. 
       The request contains ${countries.length} codes.`)
   }
-  const hostVideos = getVideosAt(host)
-  const outsideVideos = countries.map(x => getVideosAt(x))
+  const content = fs.readFileSync(__dirname + '/../Database/db.json')
+  const db = JSON.parse(content)
+  const hostVideos = getVideosAt(db, host)
+  const outsideVideos = countries.map(x => getVideosAt(db, x))
   return { hostVideos, outsideVideos }
 }
 
-let refreshed = false
 /**
- * Refresh every midnight only once a day.
+ * Refresh twice a day or if more than 12 hours have elapsed.
  */
 setInterval(() => {
   console.log('Checking clock.')
-  const date = new Date();
-  const hour = date.getHours()
-  if (!refreshed && hour === 8) {
-    updateVideos(db)
-    refreshed = true
-  } else if (hour !== 8) {
-    refreshed = false
+  const time = new Date().getTime();
+  const content = fs.readFileSync(__dirname + '/../Database/time.json')
+  const prev = JSON.parse(content).time
+  const diff = time - prev
+  if (diff >= 43200000) {
+    updateVideos()
   }
 }, 1000)
 

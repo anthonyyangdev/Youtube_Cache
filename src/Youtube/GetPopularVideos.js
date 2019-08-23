@@ -54,11 +54,17 @@ function updatePopularVideosAt(mapping, countryCode) {
  * Updates the popular videos in the database.
  * @param mapping 
  */
-function updateAllVideos(mapping) {
+function updateAllVideos() {
+  const mapping = JSON.parse(fs.readFileSync(__dirname + '/../Database/db.json'))
   for (let c in countries) {
     console.log('Country', c)
     updatePopularVideosAt(mapping, c)
   }
+  const currentTime = new Date().getTime()
+  const time = { time: currentTime }
+  const timeJSON = JSON.stringify(time)
+  fs.writeFileSync(__dirname + '/../Database/time.json', timeJSON)
+
 }
 
 module.exports = updateAllVideos
